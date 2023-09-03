@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Log an Issue</title>
+  <style>
+    /* CSS for the success popup */
+    .success-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #4CAF50; /* Green background color */
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+
+    /* CSS to beautify the form */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label, select, textarea, button {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      padding: 5px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 5px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+<h1>Log an Issue</h1>
+<form id="logIssueForm" action="javascript:void(0);">
+  <label for="reporterId">Reporter ID:</label>
+  <input type="text" id="reporterId" name="reporterId" readonly th:value="${username}"><br><br>
+
+  <label for="severity">Severity:</label>
+  <select id="severity" name="severity">
+    <option value="Low" selected>Low</option> <!-- Default value is selected -->
+    <option value="Medium">Medium</option>
+    <option value="High">High</option>
+  </select><br><br>
+
+  <label for="description">Description:</label>
+  <textarea id="description" name="description" rows="4" cols="50" required></textarea><br><br>
+  <p id="errorMessage" style="color: red;"></p>
+  <br></br>
+  <button type="button" id="LogIssue">Save Incident</button>
+</form>
+
+
+<!-- Success popup container -->
+<div class="success-popup" id="successPopup">
+  Incident saved successfully!
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Handle form submission when the button is clicked
+    $('#LogIssue').click(function() {
+        var reporterId = $('#reporterId').val();
+        var severity = $('#severity').val();
+        var description = $('#description').val();
+
+        if (description.trim() === "") {
+            // Display an error message
+            $('#errorMessage').text('Description field is required.');
+            return; // Prevent form submission
+        }
+
+        // Use $.post for AJAX submission
+        $.post('/incidentInformation/log-incident', { reporterId: reporterId, severity: severity, description: description })
+            .done(async function(response) {
+                console.log("Response : " + response);
+                // Check if the response indicates success
+                if (response != null) {
+                    // Show the success popup
+                    await showSuccessPopup();
+                    window.location.href = `/dashboard?username=${reporterId}`;
+                } else {
+                    // Display error message
+                    $('#errorMessage').text('Failed to log Issue. Please try again.');
+                }
+            })
+            .fail(function() {
+                // Display error message
+                $('#errorMessage').text('Failed to log Issue. Please try again.');
+            });
+    });
+
+    // Function to show the success popup
+    async function showSuccessPopup() {
+        var successPopup = $('#successPopup');
+        successPopup.css('display', 'block');
+
+        // Hide the success popup after a few seconds (e.g., 3 seconds)
+        setTimeout(function() {
+            successPopup.css('display', 'none');
+        }, 5000); // 3000 milliseconds = 3 seconds
+    }
+});
+</script>
+</body>
+</html>

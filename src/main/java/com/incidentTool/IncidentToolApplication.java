@@ -1,4 +1,4 @@
-package com.sail.incidentTool;
+package com.incidentTool;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

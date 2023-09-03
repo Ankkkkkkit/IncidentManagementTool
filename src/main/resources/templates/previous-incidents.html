@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SAIL India Incident Tracking Tool</title>
+    <style>
+        /* Add CSS styles for the table and cells */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2; /* Background color for table header */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* Alternate row background color */
+        }
+
+        th, td {
+            width: 16.66%; /* Distribute columns evenly */
+        }
+    </style>
+</head>
+<body>
+<h1>All Incidents</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Incident ID</th>
+        <th>Status</th>
+        <th>Severity</th>
+        <th>Description</th>
+        <th>Reported Date</th>
+        <th>Rectified Date</th>
+        <!-- Add more columns as needed -->
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Loop through the list of incidents and display them in the table -->
+    <tr th:each="incident : ${incidents}">
+        <td th:text="${incident.incidentId}"></td>
+        <td th:text="${incident.status}"></td>
+        <td th:text="${incident.severity}"></td>
+        <td th:text="${incident.description}"></td>
+        <td th:text="${incident.reported_date}"></td>
+        <td th:text="${incident.rectified_date}"></td>
+        <!-- Add more columns as needed -->
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
